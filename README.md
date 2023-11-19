@@ -1,6 +1,4 @@
 # Rest-API-PO
-
-## About this project
 This Python-based HTTP server project provides a simple yet robust API for managing user data. It follows the HTTP/1.1 protocol and supports various endpoints for operations on user entities.
 
 ## Endpoints
