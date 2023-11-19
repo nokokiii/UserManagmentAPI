@@ -1,5 +1,7 @@
 # Rest-API-PO
 
+## About this project
+This Python-based HTTP server project provides a simple yet robust API for managing user data. It follows the HTTP/1.1 protocol and supports various endpoints for operations on user entities.
 
 ## Endpoints
     GET /users
@@ -14,3 +16,9 @@
         Accepts a request with a JSON body containing "name" and "lastname" fields, either creates a new user or modifies an existing user with the specified ID, and returns a status code of 204.
     DELETE /users/<id>
         Deletes the user with the specified ID from temporary persistence and returns a status code of 204. Returns 400 if the user does not exist.
+## Technologies
+- Flask
+
+## Authors
+- [nokokiii](github.com/nokokiii)
+
