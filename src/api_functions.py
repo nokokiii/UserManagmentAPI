@@ -27,12 +27,12 @@ def get_user(user_id):
 
 
 def create_user(data):
-    if 'name' not in data or 'last_name' not in data:
+    if 'name' not in data or 'lastname' not in data:
         return {"error": "Bad Request", "message": "Missing values to create user"}, 400
     
     try:
         conn = db.create_conn()
-        conn["users"].insert({"name": data["name"], "last_name": data["last_name"]})
+        conn["users"].insert({"name": data["name"], "lastname": data["lastname"]})
         return {"message": "User created successfully"}, 201
     
     except Exception as e:
@@ -41,7 +41,7 @@ def create_user(data):
 
 
 def edit_user(user_id, data):
-    if 'name' not in data or 'last_name' not in data:
+    if 'name' not in data or 'lastname' not in data:
         return {"error": "Bad Request", "message": "Missing values to update user"}, 400
     
     try:
@@ -52,7 +52,7 @@ def edit_user(user_id, data):
 
     try:
         conn["users"].get(user_id)
-        conn["users"].upsert({"rowid": user_id, "name": data["name"], "last_name": data["last_name"]}, pk="rowid", column_order=["name", "last_name"])
+        conn["users"].upsert({"rowid": user_id, "name": data["name"], "lastname": data["lastname"]}, pk="rowid", column_order=["name", "lastname"])
         return {}, 204
     
     except sqlite_utils.db.NotFoundError:
@@ -64,7 +64,7 @@ def edit_user(user_id, data):
 
 
 def edit_add_user(user_id, data):
-    if 'name' not in data or 'last_name' not in data:
+    if 'name' not in data or 'lastname' not in data:
         return {"error": "Bad Request", "message": "Missing values to update user"}, 400
     
     try:
@@ -76,11 +76,11 @@ def edit_add_user(user_id, data):
 
     try:
         conn["users"].get(user_id)
-        conn["users"].upsert({"rowid": user_id, "name": data["name"], "last_name": data["last_name"]}, pk="rowid", column_order=["name", "last_name"])
+        conn["users"].upsert({"rowid": user_id, "name": data["name"], "lastname": data["lastname"]}, pk="rowid", column_order=["name", "lastname"])
         return {}, 204
     
     except sqlite_utils.db.NotFoundError:
-        conn["users"].insert({"name": data["name"], "last_name": data["last_name"], "rowid": user_id})
+        conn["users"].insert({"name": data["name"], "lastname": data["lastname"], "rowid": user_id})
         return {"message": "User created successfully"}, 201
     
     except Exception as e:

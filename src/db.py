@@ -10,12 +10,12 @@ from sqlite_utils import Database
 DATABASE = "users.db"
 
 EXAMPLE_USERS = [
-    {"name": "John", "last_name": "Doe"},
-    {"name": "Alex", "last_name": "Smith"},
-    {"name": "Emily", "last_name": "Johnson"},
-    {"name": "Chris", "last_name": "Williams"},
-    {"name": "Jessica", "last_name": "Brown"},
-    {"name": "Michael", "last_name": "Davis"}
+    {"name": "John", "lastname": "Doe"},
+    {"name": "Alex", "lastname": "Smith"},
+    {"name": "Emily", "lastname": "Johnson"},
+    {"name": "Chris", "lastname": "Williams"},
+    {"name": "Jessica", "lastname": "Brown"},
+    {"name": "Michael", "lastname": "Davis"}
 ]
 
 
