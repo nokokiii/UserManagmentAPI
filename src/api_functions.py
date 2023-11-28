@@ -7,7 +7,7 @@ conn = db.create_conn("users.db")
 def get_all_users():
     try:
         conn = db.create_conn("users.db")
-        return list(conn["users"].rows), 200
+        return list(conn.query("select rowid, * from users")), 200
     except Exception as e:
         print(e) # TODO: Change this print to logging
         return {"error": "Internal Error", "message": "There was problem while getting users."}, 500
@@ -19,7 +19,7 @@ def get_user(user_id):
         
         if not conn["users"].get(user_id):
             return {"error": "Not Found", "message": "User does not exist"}, 404
-        return conn["users"].get(user_id), 200
+        return next(conn.query(f"SELECT rowid, * FROM users WHERE rowid={user_id}")), 200
     except Exception as e:
         print(e) # TODO: Change this print to logging
         return {"error": "Internal Error", "message": "There was problem while getting user."}, 500
@@ -72,7 +72,16 @@ def edit_add_user(user_id, data):
         return {"message": "User updated successfully"}, 204
     except sqlite_utils.db.NotFoundError:        
         # Add user with id user_id
-        conn["users"].insert({"name": data["name"], "last_name": data["last_name"], "id": user_id})
+        conn["users"].insert({"name": data["name"], "last_name": data["last_name"], "rowid": user_id})
+        # TODO: Change id to user_id
+        
+        # try:
+        #     last_inserted_id = conn["users"].last_insert_rowid
+        #     conn["users"].update({"rowid": last_inserted_id}, doc_ids=[last_inserted_id])
+        # except Exception as e:
+        #     print(e)
+        #     return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
+        
         return {"message": "User created successfully"}, 201
     except Exception as e:
         print(e) # TODO: Change this print to logging
