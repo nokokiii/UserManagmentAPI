@@ -7,14 +7,6 @@ from typing import Optional
 
 from sqlite_utils import Database
 
-CREATION_QUERY = """
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
-            name TEXT NOT NULL,
-            last_name TEXT NOT NULL
-        );
-"""
-
 EXAMPLE_USERS = [
     {"name": "John", "last_name": "Doe"},
     {"name": "Alex", "last_name": "Smith"},
@@ -52,7 +44,6 @@ def add_example_users(database: str) -> None:
                 
 def create_db(database: str, example_users: bool=False) -> None:
     if db := create_conn(database):
-        db.query(CREATION_QUERY)
         print("Database created successfully.")  # TODO: Change this print to logging
         if example_users:
             add_example_users(db)
