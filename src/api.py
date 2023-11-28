@@ -1,11 +1,9 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
 
 import src.api_functions as af
 from src.db import create_db
 
 app = Flask(__name__)
-CORS(app)
 
 @app.errorhandler(404)
 def not_found(error):
