@@ -7,6 +7,8 @@ from typing import Optional
 
 from sqlite_utils import Database
 
+DATABASE = "users.db"
+
 EXAMPLE_USERS = [
     {"name": "John", "last_name": "Doe"},
     {"name": "Alex", "last_name": "Smith"},
@@ -17,7 +19,7 @@ EXAMPLE_USERS = [
 ]
 
 
-def create_conn(database: str) -> Optional[sqlite3.Connection]:
+def create_conn() -> Optional[sqlite3.Connection]:
     """
     Creates a connection to the database.
 
@@ -28,29 +30,29 @@ def create_conn(database: str) -> Optional[sqlite3.Connection]:
         Optional[sqlite3.Connection]: The connection object if successful, None otherwise.
     """
     try:
-        return Database(database)
+        return Database(DATABASE)
     except sqlite3.Error as e:
         print(f"Error creating connection to database: {e}")
         return None
 
 
-def add_example_users(database: str) -> None:
+def add_example_users() -> None:
+    db = create_conn()
     for user in EXAMPLE_USERS:
         try:
-            database["users"].insert(user)
+            db["users"].insert(user)
         except sqlite3.Error as e:
             print(f"Error adding user to database: {e}")
 
                 
-def create_db(database: str, example_users: bool=False) -> None:
+def create_db(database: str = DATABASE) -> None:
     if db := create_conn(database):
         print("Database created successfully.")  # TODO: Change this print to logging
-        if example_users:
-            add_example_users(db)
     else:
         print("Could not create database.") # TODO: Change this print to logging
         return
 
 
 if __name__ == '__main__':
-    create_db("./users.db", True)
+    create_db()
+    add_example_users()
