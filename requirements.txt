@@ -1,1 +1,2 @@
 Flask==3.0.0.1
+sqlite_utils==3.35.2
