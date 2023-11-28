@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 
-import src.api_functions as af
-from src.db import create_db
+import api_functions as af
+from db import create_db, add_example_users
 
 app = Flask(__name__)
 
@@ -48,4 +48,11 @@ def delete_user(user_id):
     return jsonify(response), status_code
 
 
-app.run(debug=True, port=5000, host='localhost')
+@app.route('/generate_users', methods=['GET'])
+def generate_users():
+    add_example_users()
+    return jsonify({"message": "Users generated successfully"}), 200
+    
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000, host='localhost')
