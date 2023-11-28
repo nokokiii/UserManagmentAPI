@@ -47,17 +47,18 @@ class FlaskUntiTest(unittest.TestCase):
         self.assertEqual(response.json, {"message": "User created successfully"})
     
     
-        def test_update_user(self):
-            response = self.app.patch('/users/1', json={"name": "John", "last_name": "Doe"})
-            self.assertEqual(response.status_code, 204)
+    def test_update_user(self):
+        response = self.app.patch('/users/1', json={"name": "John", "last_name": "Doe"})
+        self.assertEqual(response.status_code, 204)
+    
+        response = self.app.patch('/users/1', json={"name": "John"})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json, {'error': 'Bad Request', 'message': 'Missing values to update user'})
         
-            response = self.app.patch('/users/1', json={"name": "John"})
-            self.assertEqual(response.status_code, 400)
-            self.assertEqual(response.json, {'error': 'Bad Request', 'message': 'Missing values to update user'})
-            
-            response = self.app.patch('/users/500', json={"name": "John", "last_name": "Doe"})
-            self.assertEqual(response.status_code, 404)
-            self.assertEqual(response.json, {'error': 'Not Found', 'message': 'User does not exist'})
+        response = self.app.patch('/users/1000', json={"name": "John", "last_name": "Doe"})
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json, {'error': 'Not Found', 'message': 'User does not exist'})
+    
     
     def test_update_add_user(self):
         # Testing PUT with existing user
