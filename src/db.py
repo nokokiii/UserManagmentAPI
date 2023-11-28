@@ -3,6 +3,7 @@ This file contains the functions that are used to interact with the database.
 """
 
 import sqlite3
+import logging
 from typing import Optional
 
 from sqlite_utils import Database
@@ -30,13 +31,20 @@ def create_conn() -> Optional[sqlite3.Connection]:
         Optional[sqlite3.Connection]: The connection object if successful, None otherwise.
     """
     try:
+        logging.info("Creating connection to database")
         return Database(DATABASE)
     except sqlite3.Error as e:
-        print(f"Error creating connection to database: {e}")
+        logging.error(e)
         return None
 
 
 def add_example_users() -> None:
+    """
+    Adds the example users to the database.
+        
+    Returns:
+        None
+    """
     db = create_conn()
     for user in EXAMPLE_USERS:
         try:
@@ -44,15 +52,6 @@ def add_example_users() -> None:
         except sqlite3.Error as e:
             print(f"Error adding user to database: {e}")
 
-                
-def create_db(database: str = DATABASE) -> None:
-    if db := create_conn(database):
-        print("Database created successfully.")  # TODO: Change this print to logging
-    else:
-        print("Could not create database.") # TODO: Change this print to logging
-        return 
-
 
 if __name__ == '__main__':
-    create_db()
     add_example_users()

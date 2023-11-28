@@ -1,3 +1,5 @@
+import logging
+
 import sqlite_utils
 
 import db
@@ -9,7 +11,7 @@ def get_all_users():
         return list(conn.query("select rowid, * from users")), 200
     
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while getting users."}, 500
 
     
@@ -22,7 +24,7 @@ def get_user(user_id):
         return {"error": "Not Found", "message": "User does not exist"}, 404
     
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while getting user."}, 500
 
 
@@ -36,7 +38,7 @@ def create_user(data):
         return {"message": "User created successfully"}, 201
     
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while creating user."}, 500
 
 
@@ -47,7 +49,7 @@ def edit_user(user_id, data):
     try:
         conn = db.create_conn()        
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
     try:
@@ -59,7 +61,7 @@ def edit_user(user_id, data):
         return {"error": "Not Found", "message": "User does not exist"}, 404
     
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
 
@@ -71,7 +73,7 @@ def edit_add_user(user_id, data):
         conn = db.create_conn()
         
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
     try:
@@ -84,7 +86,7 @@ def edit_add_user(user_id, data):
         return {"message": "User created successfully"}, 201
     
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
 
@@ -98,5 +100,5 @@ def delete_user(user_id):
         return {"error": "Not Found", "message": "User does not exist"}, 404
     
     except Exception as e:
-        print(e) # TODO: Change this print to logging
+        logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while deleting user."}, 500

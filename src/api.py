@@ -1,9 +1,16 @@
+"""
+This is the main file for the API. It contains all the routes and the main function to run the API.
+"""
+
+import logging
+
 from flask import Flask, jsonify, request
 
 import api_functions as af
-from db import create_db, add_example_users
+from db import add_example_users
 
 app = Flask(__name__)
+logging.basicConfig(filename='./logs/app.log', level=logging.DEBUG)
 
 @app.errorhandler(404)
 def not_found(error):
@@ -51,8 +58,8 @@ def delete_user(user_id):
 @app.route('/generate_users', methods=['GET'])
 def generate_users():
     add_example_users()
-    return jsonify({"message": "Users generated successfully"}), 200
+    return jsonify({"message": "Users generated successfully"}), 201
     
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000, host='localhost')
+    app.run(port=5000, host='localhost')
