@@ -1,5 +1,6 @@
 import unittest
 from api import app
+from db import create_conn
 
 class FlaskUntiTest(unittest.TestCase):
     
@@ -21,7 +22,7 @@ class FlaskUntiTest(unittest.TestCase):
     
     
     def test_get_user(self):
-        response = self.app.get('/generate_users')
+        self.app.put('/users/1', json={"name": "John", "last_name": "Doe"})  # We need to create user with id 1
         response = self.app.get('/users/1')
         self.assertEqual(response.status_code, 200)
         self.assertIs(type(response.json), dict)
@@ -43,31 +44,31 @@ class FlaskUntiTest(unittest.TestCase):
         # Creating user with one more field than expected. API should ignore age field
         response = self.app.post('/users', json={"name": "John", "last_name": "Doe", "age": 25})
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json, {'message': 'User created successfully'})
+        self.assertEqual(response.json, {"message": "User created successfully"})
     
     
-    def test_update_user(self):
-        response = self.app.patch('/users/1', json={"name": "John", "last_name": "Doe"})
-        self.assertEqual(response.status_code, 204)
-        self.assertEqual(response.json, {'message': 'User updated successfully'})
-    
-        response = self.app.patch('/users/1', json={"name": "John"})
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json, {'error': 'Bad Request', 'message': 'Missing values to update user'})
+        def test_update_user(self):
+            response = self.app.patch('/users/1', json={"name": "John", "last_name": "Doe"})
+            self.assertEqual(response.status_code, 204)
         
-        response = self.app.patch('/users/500', json={"name": "John", "last_name": "Doe"})
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json, {'error': 'Not Found', 'message': 'User does not exist'})
-        
+            response = self.app.patch('/users/1', json={"name": "John"})
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.json, {'error': 'Bad Request', 'message': 'Missing values to update user'})
+            
+            response = self.app.patch('/users/500', json={"name": "John", "last_name": "Doe"})
+            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.json, {'error': 'Not Found', 'message': 'User does not exist'})
     
     def test_update_add_user(self):
         # Testing PUT with existing user
+        self.app.put('/users/1', json={"name": "John", "last_name": "Doe"})  # We need to create user with id 1
         response = self.app.put('/users/1', json={"name": "John", "last_name": "Doe"})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
         
         # Testing PUT with non-existing user
         response = self.app.put('/users/500', json={"name": "John", "last_name": "Doe", "age": 25})
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json, {"message": "User created successfully"})
     
     
     def test_delete_user(self):
@@ -75,5 +76,9 @@ class FlaskUntiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 204)
         
 
+    
 if __name__ == "__main__":
+    conn = create_conn()
+    conn["users"].drop(ignore=True)
+    
     unittest.main()

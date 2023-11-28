@@ -16,10 +16,10 @@ def get_all_users():
 def get_user(user_id):
     try:
         conn = db.create_conn()
-        
-        if not conn["users"].get(user_id):
-            return {"error": "Not Found", "message": "User does not exist"}, 404
-        return next(conn.query(f"SELECT rowid, * FROM users WHERE rowid={user_id}")), 200
+        return conn["users"].get(user_id), 200
+    
+    except sqlite_utils.db.NotFoundError:
+        return {"error": "Not Found", "message": "User does not exist"}, 404
     
     except Exception as e:
         print(e) # TODO: Change this print to logging
@@ -45,16 +45,15 @@ def edit_user(user_id, data):
         return {"error": "Bad Request", "message": "Missing values to update user"}, 400
     
     try:
-        conn = db.create_conn()
-        
+        conn = db.create_conn()        
     except Exception as e:
         print(e) # TODO: Change this print to logging
         return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
     try:
         conn["users"].get(user_id)
-        conn["users"].update({"name": data["name"], "last_name": data["last_name"]}, doc_ids=[user_id])
-        return {"message": "User updated successfully"}, 204
+        conn["users"].upsert({"rowid": user_id, "name": data["name"], "last_name": data["last_name"]}, pk="rowid", column_order=["name", "last_name"])
+        return {}, 204
     
     except sqlite_utils.db.NotFoundError:
         return {"error": "Not Found", "message": "User does not exist"}, 404
@@ -69,7 +68,7 @@ def edit_add_user(user_id, data):
         return {"error": "Bad Request", "message": "Missing values to update user"}, 400
     
     try:
-        conn = db.create_conn("users.db")
+        conn = db.create_conn()
         
     except Exception as e:
         print(e) # TODO: Change this print to logging
@@ -77,8 +76,8 @@ def edit_add_user(user_id, data):
 
     try:
         conn["users"].get(user_id)
-        conn["users"].update({"name": data["name"], "last_name": data["last_name"]}, doc_ids=[user_id])
-        return {"message": "User updated successfully"}, 204
+        conn["users"].upsert({"rowid": user_id, "name": data["name"], "last_name": data["last_name"]}, pk="rowid", column_order=["name", "last_name"])
+        return {}, 204
     
     except sqlite_utils.db.NotFoundError:
         conn["users"].insert({"name": data["name"], "last_name": data["last_name"], "rowid": user_id})
@@ -91,9 +90,9 @@ def edit_add_user(user_id, data):
 
 def delete_user(user_id):
     try:
-        conn = db.create_conn("users.db")
-        conn["users"].delete(doc_ids=[user_id])
-        return {"message": "User deleted successfully"}, 204
+        conn = db.create_conn()
+        conn["users"].delete(user_id)
+        return {}, 204
     
     except sqlite_utils.db.NotFoundError:
         return {"error": "Not Found", "message": "User does not exist"}, 404

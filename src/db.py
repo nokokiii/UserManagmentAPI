@@ -50,7 +50,7 @@ def create_db(database: str = DATABASE) -> None:
         print("Database created successfully.")  # TODO: Change this print to logging
     else:
         print("Could not create database.") # TODO: Change this print to logging
-        return
+        return 
 
 
 if __name__ == '__main__':
