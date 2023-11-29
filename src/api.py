@@ -3,6 +3,7 @@ This is the main file for the API. It contains all the routes and the main funct
 """
 
 import logging
+import os
 
 from flask import Flask, jsonify, request
 
@@ -10,7 +11,8 @@ import api_functions as af
 from db import add_example_users
 
 app = Flask(__name__)
-logging.basicConfig(filename='./logs/app.log', level=logging.DEBUG)
+
+logging.basicConfig(filename='src/logs/api.log', level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 @app.errorhandler(404)
 def not_found(error):
