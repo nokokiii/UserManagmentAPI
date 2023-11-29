@@ -1,6 +1,7 @@
 import unittest
-from api import app
-from db import create_conn, add_example_users
+
+from src.api import app
+from src.db import create_conn
 
 class FlaskIntegrationTest(unittest.TestCase):
 
@@ -22,14 +23,21 @@ class FlaskIntegrationTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json, {"name": "John", "lastname": "Doe"})
         
-        # Update user
-        response = self.app.patch('/users/1', json={"name": "John", "lastname": "Smith"})
+        # Update user name
+        response = self.app.patch('/users/1', json={"name": "Aduarto"})
         self.assertEqual(response.status_code, 204)
-                
+        
         # Check if user has correct values
         response = self.app.get('/users/1')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {"name": "John", "lastname": "Smith"})
+        self.assertEqual(response.json, {"name": "Aduarto", "lastname": "Doe"})
+        
+        # Update user lastname
+        response = self.app.patch('/users/1', json={"lastname": "Montanof"})
+        self.assertEqual(response.status_code, 204)
+        
+        # Check if user has correct values
+
         
         # Delete user
         response = self.app.delete('/users/1')
@@ -48,7 +56,7 @@ class FlaskIntegrationTest(unittest.TestCase):
         
         # Generate example users
         response = self.app.get('/generate_users')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         
         # Update user with update_add_user
         response = self.app.put('/users/1', json={"name": "John", "lastname": "Smith"})
@@ -85,7 +93,7 @@ class FlaskIntegrationTest(unittest.TestCase):
         
         # Generate example users
         response = self.app.get('/generate_users')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         
         # Check if get_all_users returns correct values
         response = self.app.get('/users')
