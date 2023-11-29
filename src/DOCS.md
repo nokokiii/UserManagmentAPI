@@ -67,7 +67,7 @@ Response:
 
 ### Method: `PATCH`
 
-Update an existing user
+Update details of an existing user
 
 Request:
 
