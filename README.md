@@ -29,13 +29,7 @@ To run this project locally, follow this steps:
 4. Run the tests
 
   ```bash
-  python -m src.tests.FlaskUnitTest
-  ```
-
-  and
-
-  ```bash
-  python -m src.tests.FlaskIntegrationTest
+  python -m src.tests.run
   ```
 
 ## Technologies
