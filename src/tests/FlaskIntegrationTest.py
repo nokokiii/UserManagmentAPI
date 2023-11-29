@@ -185,6 +185,3 @@ class FlaskIntegrationTest(unittest.TestCase):
                 {"name": "Leonard", "lastname": "Wilson", "rowid": 7},
                 {"name": "Jeo", "lastname": "Biden", "rowid": 700}
         ])
-        
-if __name__ == "__main__":
-    unittest.main()

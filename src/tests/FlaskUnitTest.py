@@ -2,7 +2,7 @@ import unittest
 from src.api import app
 from src.db import create_conn
 
-class FlaskUntiTest(unittest.TestCase):
+class FlaskUnitTest(unittest.TestCase):
     
     def setUp(self):
         app.config['TESTING'] = True
@@ -88,8 +88,3 @@ class FlaskUntiTest(unittest.TestCase):
         
         response = self.app.delete('/users/1')
         self.assertEqual(response.status_code, 204)
-        
-
-    
-if __name__ == "__main__":    
-    unittest.main()
