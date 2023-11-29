@@ -2,7 +2,7 @@ import logging
 
 import sqlite_utils
 
-import db
+import src.db as db
 
 
 def get_all_users():
@@ -43,26 +43,35 @@ def create_user(data):
 
 
 def edit_user(user_id, data):
-    if 'name' not in data or 'lastname' not in data:
-        return {"error": "Bad Request", "message": "Missing values to update user"}, 400
-    
     try:
         conn = db.create_conn()        
+        conn["users"].get(user_id)
+    except sqlite_utils.db.NotFoundError:
+        return {"error": "Not Found", "message": "User does not exist"}, 404
     except Exception as e:
         logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
-    try:
-        conn["users"].get(user_id)
-        conn["users"].upsert({"rowid": user_id, "name": data["name"], "lastname": data["lastname"]}, pk="rowid", column_order=["name", "lastname"])
-        return {}, 204
+    if 'name' in data:
+        try:
+            conn["users"].update(user_id, {"name": data["name"]})
+            return {}, 204
+        
+        except Exception as e:
+            logging.error(e)
+            return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
     
-    except sqlite_utils.db.NotFoundError:
-        return {"error": "Not Found", "message": "User does not exist"}, 404
+    elif 'lastname' in data:
+        try:
+            conn["users"].update(user_id, {"lastname": data["lastname"]})
+            return {}, 204
+            
+        except Exception as e:
+            logging.error(e)
+            return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
     
-    except Exception as e:
-        logging.error(e)
-        return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
+    else:
+        return {"error": "Bad Request", "message": "Missing values to update user"}, 400
 
 
 def edit_add_user(user_id, data):

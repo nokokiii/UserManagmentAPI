@@ -3,12 +3,11 @@ This is the main file for the API. It contains all the routes and the main funct
 """
 
 import logging
-import os
 
 from flask import Flask, jsonify, request
 
-import api_functions as af
-from db import add_example_users
+import src.api_functions as af
+from src.db import add_example_users
 
 app = Flask(__name__)
 
