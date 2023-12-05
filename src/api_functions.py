@@ -52,26 +52,18 @@ def edit_user(user_id, data):
         logging.error(e)
         return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
-    if 'name' in data:
-        try:
+    try:
+        if 'name' in data:
             conn["users"].update(user_id, {"name": data["name"]})
             return {}, 204
-        
-        except Exception as e:
-            logging.error(e)
-            return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
-    
-    elif 'lastname' in data:
-        try:
+        elif 'lastname' in data:
             conn["users"].update(user_id, {"lastname": data["lastname"]})
             return {}, 204
-            
-        except Exception as e:
-            logging.error(e)
-            return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
-    
-    else:
-        return {"error": "Bad Request", "message": "Missing values to update user"}, 400
+        else:
+            return {"error": "Bad Request", "message": "Missing values to update user"}, 400        
+    except Exception as e:
+        logging.error(e)
+        return {"error": "Internal Error", "message": "There was problem while updating user."}, 500
 
 
 def edit_add_user(user_id, data):
