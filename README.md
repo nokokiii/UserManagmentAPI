@@ -1,4 +1,4 @@
-# API Software Engineering
+# User Managment API
 
 This Python-based HTTP server project provides a simple API for managing user data. Supports various endpoints for operations on user entities.
 
